@@ -1,3 +1,17 @@
 # Trust-Evaluation-in-Federated-Learning
 
 This repository contains the Jupiter-notebooks used for the experiments for the project  Trust Evaluation in Federated Learning. This project was done as a part of EEGR 750 course at Morgan State University.
+
+
+For the experiment, we worked with the existing DUET server to create a federated learning environment. We have used PySyft along with Pytorch. Each client loaded data on their respective computing environment and trained the model created by the central server. In the project work, we would assume that we have n = 3 clients. Each client would load one of the divided datasets of MNIST data. The dataset would have 2000 training data samples. For giving trust scores, the central server would load a training dataset of 2000 samples along with a testing dataset. For establishing the connection, the client would launch a duet session by “sy.launch_duet()” , generate a session key, send that to the server and the server would join to that session by “sy.join_duet ()” and for joining the session, the server would use the session key sent by the client. For our project as we use the default session joining command “loopback=True”. 
+
+For working with the code- first, the clients would launch a duet. Second, The server would join the duet and send the initial code and wait for local updates. The clients would train the model sent by the server. After that, we would again work from the server side and request model updates from the clients. The server can not access the model update directly. The server has to send a request and only gets anything if the client accepts that request. Once the server gets the model updates, it will run the rest of the parts of the code and determine the trust scores. 
+
+We would keep taking the trust scores for four updates of the model and compare the scores. The initial two models to be trained by the local data are saved separately so that the initial model parameters are the same for each client and for each computation. The auto-encoder model is also saved separately so that for each use, the model parameters are the same.
+
+There are five .ipynb codes for the clients. Three of them are without any abnormality. For the rest two codes, one is with label flipping attack, and for one code, we have set all parameters to zero. First, we have to establish the connection of the server with the clients without any abnormality and calculate the trust score. Second, we would establish a connection with two clients without abnormality, and one client would make all model parameters zero and send them to the server. Third, we would establish a connection with two clients without abnormality, and one client would make a label flipping attack. And for the fourth part, one client will be without attack, one will send al zero parameters, and another one will make label flipping attack. For each case, we can change the training epoch and observe the change in the trust score.
+For the experiment, we have followed some libraries and examples. The references are given below:
+1) "Alibi Explain", https://docs.seldon.io/projects/alibi/en/stable/index.html
+2)"Handling heterogeneity in the analysis of biomedical information", https://epione.gitlabpages.inria.fr/flhd/index.html
+3)"Chapter 7: Advanced Deep Learning", https://www.tomasbeuzen.com/deep-learning-with-pytorch/chapters/chapter7_advanced-deep-learning.html
+4)"Foundations of Private Computation", Courses, OpenMined, https://github.com/OpenMined/courses
